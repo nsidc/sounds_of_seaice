@@ -1,5 +1,5 @@
 // https://github.com/Tonejs/Tone.js/#hello-tone
-import { Synth, Loop, Transport, Reverb } from "tone";
+import { Sequence, Synth, Transport } from "tone";
 
 import { example_data } from './constants.js';
 
@@ -34,19 +34,10 @@ const normalize = (data, new_min, new_max) => {
 };
 
 const normalized_values = normalize(example_data, 50, 1000);
-let idx = 0;
 
-const loop_callback = (time) => {
-  let new_val = normalized_values[idx];
-  console.log(new_val);
-  synth.triggerAttackRelease(new_val, '4n', time);
-  if (normalized_values[idx + 1]) {
-    idx += 1;
-  } else {
-    idx = 0;
-  }
-};
+const seaice_seq = new Sequence((time, note) => {
+  synth.triggerAttackRelease(note, '16n', time);
+}, normalized_values, '16n');
 
-const loop = new Loop(loop_callback, '16n');
-
-loop.start(0);
+seaice_seq.loop = false;
+seaice_seq.start();
