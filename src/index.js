@@ -7,19 +7,7 @@ import { example_data } from './constants.js';
 Transport.toggle();
 
 // create a synth and connect it to the master output
-const synth = new Synth(
-  {
-    oscillator: {
-      type: 'triangle'
-    },
-      envelope : {
-        attack : 0.01,
-        decay : 0.25,
-        sustain : 0.35,
-        release : 0.02
-    }
-  }
-).toMaster();
+const synth = new Synth().toMaster();
 
 const normalize = (data, new_min, new_max) => {
   const values = Object.values(data);
