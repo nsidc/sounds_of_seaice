@@ -7,6 +7,9 @@ module.exports = {
   mode: 'development',
   entry: './src/index.js',
   devtool: 'inline-source-map',
+  devserver: {
+    contentBase: './dist',
+  },
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
