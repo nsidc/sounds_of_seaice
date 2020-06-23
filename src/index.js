@@ -1,17 +1,9 @@
 // https://github.com/Tonejs/Tone.js/#hello-tone
-import { Sequence, Synth, Transport } from "tone";
+import { Sequence, Oscillator, Transport } from "tone";
 
 import { fetch_url} from './constants';
 
-// create a synth and connect it to the master output
-const synth = new Synth({
-  envelope: {
-    attack: 0.005,
-    sustain: 1,
-    decay: 0.1,
-    release: 1,
-  }
-}).toMaster();
+const synth = new Oscillator().toMaster();
 
 const normalize = (data, new_min, new_max) => {
   const values = Object.values(data);
@@ -38,11 +30,13 @@ const initialize_sequence_with_data = () => {
 
     const seaice_seq = new Sequence((time, note) => {
       document.getElementById('date').innerHTML = note.date;
-      synth.triggerAttackRelease(note.value, '16n', time);
+      synth.frequency.value = note.value;
     }, normalized_values, '16n');
 
     seaice_seq.loop = false;
     Transport.start();
+    synth.frequency.value = normalized_values[0].value;
+    synth.start();
     seaice_seq.start();
   });
 };
