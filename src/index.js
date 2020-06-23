@@ -30,7 +30,7 @@ const initialize_sequence_with_data = () => {
     const normalized_values = normalize(data, 50, 1000);
 
     const seaice_seq = new Sequence((time, note) => {
-      console.log(note.date);
+      document.getElementById('date').innerHTML = note.date;
       synth.triggerAttackRelease(note.value, '16n', time);
     }, normalized_values, '16n');
 
