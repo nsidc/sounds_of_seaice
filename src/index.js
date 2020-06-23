@@ -15,10 +15,18 @@ const normalize = (data, new_min, new_max) => {
   for (let [date, value] of Object.entries(data)) {
     newValues.push({
       date,
-      value: (new_max - new_min) * ((value - min) / (max - min)) + new_min});
+      value: (new_max - new_min) * ((value - min) / (max - min)) + new_min,
+      original_value: value,
+    });
   }
 
   return newValues;
+};
+
+const updateNote = (note) => {
+  document.getElementById('infoDiv').innerHTML = `${note.date}: ${note.original_value.toFixed(3)} mkm2`;
+
+  synth.frequency.value = note.value;
 };
 
 const initialize_sequence_with_data = () => {
@@ -29,13 +37,12 @@ const initialize_sequence_with_data = () => {
     const normalized_values = normalize(data, 50, 1000);
 
     const seaice_seq = new Sequence((time, note) => {
-      document.getElementById('date').innerHTML = note.date;
-      synth.frequency.value = note.value;
+      updateNote(note);
     }, normalized_values, '16n');
 
     seaice_seq.loop = false;
     Transport.start();
-    synth.frequency.value = normalized_values[0].value;
+    updateNote(normalized_values[0]);
     synth.start();
     seaice_seq.start();
   });
