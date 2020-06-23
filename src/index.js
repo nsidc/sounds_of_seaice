@@ -7,17 +7,26 @@ const synth = new Oscillator().toMaster();
 
 const normalize = (data, new_min, new_max) => {
   const values = Object.values(data);
-  const min = Math.min.apply(Math, values);
-  const max = Math.max.apply(Math, values);
+  // Filter out null values
+  // TODO: reconsider. THis operation happens again in the loop below.
+  const filtered_values = values.filter(x => x);
+
+  // Get the min & max values
+  const min = Math.min.apply(Math, filtered_values);
+  const max = Math.max.apply(Math, filtered_values);
 
   // TODO sort by date (key of data object)
   let newValues = [];
   for (let [date, value] of Object.entries(data)) {
-    newValues.push({
-      date,
-      value: (new_max - new_min) * ((value - min) / (max - min)) + new_min,
-      original_value: value,
-    });
+    // Filter out null values
+    if (value) {
+      newValues.push({
+        date,
+        // calculate the new value.
+        value: (new_max - new_min) * ((value - min) / (max - min)) + new_min,
+        original_value: value,
+      });
+    };
   }
 
   return newValues;
@@ -33,7 +42,6 @@ const initialize_sequence_with_data = () => {
   fetch(fetch_url)
   .then(response => response.json())
   .then(data => {
-    // TODO: display date along w/ tone.
     const normalized_values = normalize(data, 50, 1000);
 
     const seaice_seq = new Sequence((time, note) => {
