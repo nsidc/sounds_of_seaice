@@ -4,7 +4,14 @@ import { Sequence, Synth, Transport } from "tone";
 import { fetch_url} from './constants';
 
 // create a synth and connect it to the master output
-const synth = new Synth().toMaster();
+const synth = new Synth({
+  envelope: {
+    attack: 0.005,
+    sustain: 1,
+    decay: 0.1,
+    release: 1,
+  }
+}).toMaster();
 
 const normalize = (data, new_min, new_max) => {
   const values = Object.values(data);
