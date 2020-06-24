@@ -36,20 +36,36 @@ const updateNote = (note) => {
   document.getElementById('infoDiv').innerHTML = `${note.date}: ${note.original_value.toFixed(3)} mkm2`;
 
   synth.frequency.value = note.value;
+
+  if (note.hasOwnProperty('callback')) {
+    note.callback();
+  };
 };
 
 const initialize_sequence_with_data = () => {
   fetch(fetch_url)
   .then(response => response.json())
   .then(data => {
-    const normalized_values = normalize(data, 50, 1000);
+    let normalized_values = normalize(data, 50, 1000);
+
+    // Add a 'final note' with a callback that will stop the sequence and the
+    // synth. Prevents the last note from playing out indefinitely.
+    let final_note = Object.assign({}, normalized_values[normalized_values.length - 1]);
+    final_note.callback = () => {
+        seaice_seq.stop();
+        synth.stop();
+    };
+    normalized_values.push(final_note);
 
     const seaice_seq = new Sequence((time, note) => {
       updateNote(note);
     }, normalized_values, '16n');
 
+
     seaice_seq.loop = false;
     Transport.start();
+    // Update the synth with the first note, so that when the audio starts
+    // playing, it is from the first value of data that we have.
     updateNote(normalized_values[0]);
     synth.start();
     seaice_seq.start();
