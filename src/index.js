@@ -75,7 +75,10 @@ const initialize_sequence_with_data = () => {
       plotOptions: {
         series: {
           animation: false
-        }
+        },
+        line: {
+          marker: false,
+        },
       },
     });
 
