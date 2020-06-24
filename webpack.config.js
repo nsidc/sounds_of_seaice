@@ -18,7 +18,7 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: 'Sounds of Sea Ice',
-      template: path.resolve(__dirname, 'src', 'index.ejs');
+      template: path.resolve(__dirname, 'src', 'index.ejs'),
     }),
   ],
 };
