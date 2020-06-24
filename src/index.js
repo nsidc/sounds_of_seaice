@@ -46,7 +46,7 @@ const initialize_sequence_with_data = () => {
   fetch(fetch_url)
   .then(response => response.json())
   .then(data => {
-    let normalized_values = normalize(data, 50, 1000);
+    let normalized_values = normalize(data, 20, 800);
 
     // Add a 'final note' with a callback that will stop the sequence and the
     // synth. Prevents the last note from playing out indefinitely.
