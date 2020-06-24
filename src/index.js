@@ -1,4 +1,3 @@
-// https://github.com/Tonejs/Tone.js/#hello-tone
 import { Sequence, Oscillator, Transport } from "tone";
 
 import { fetch_url} from './constants';
