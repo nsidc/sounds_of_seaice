@@ -1,6 +1,6 @@
-import { Sequence, Oscillator, Transport } from "tone";
+import { Oscillator, Sequence, Transport } from "tone";
 
-import { fetch_url} from './constants';
+import { fetch_url } from './constants';
 
 const synth = new Oscillator().toMaster();
 
