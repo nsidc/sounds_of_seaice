@@ -60,7 +60,6 @@ const initialize_sequence_with_data = () => {
       updateNote(note);
     }, normalized_values, '16n');
 
-
     seaice_seq.loop = false;
     Transport.start();
     // Update the synth with the first note, so that when the audio starts
