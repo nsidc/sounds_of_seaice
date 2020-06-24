@@ -1,3 +1,4 @@
+import * as Highcharts from "highcharts";
 import { Oscillator, Sequence, Transport } from "tone";
 
 import { fetch_url } from './constants';
@@ -33,12 +34,12 @@ const normalize = (data, new_min, new_max) => {
 
 const updateNote = (note) => {
   document.getElementById('infoDiv').innerHTML = `${note.date}: ${note.original_value.toFixed(3)} mkm2`;
-
   synth.frequency.value = note.value;
 
   if (note.hasOwnProperty('callback')) {
     note.callback();
   };
+
 };
 
 const initialize_sequence_with_data = () => {
@@ -46,6 +47,37 @@ const initialize_sequence_with_data = () => {
   .then(response => response.json())
   .then(data => {
     let normalized_values = normalize(data, 20, 800);
+
+    const dates = normalized_values.map((note) => {
+      return note.date;
+    });
+    const original_values = normalized_values.map((note) => {
+      return note.original_value;
+    });
+
+    const chart = Highcharts.chart('chart', {
+      chart: {
+        type: 'line',
+      },
+      title: {
+        text: 'Sea Ice Extent',
+      },
+      xAxis: {
+        categories: dates
+      },
+      series: [{
+        name: 'Sea Ice Extent',
+        data: [],
+      }],
+      chart: {
+        animation: false,
+      },
+      plotOptions: {
+        series: {
+          animation: false
+        }
+      },
+    });
 
     // Add a 'final note' with a callback that will stop the sequence and the
     // synth. Prevents the last note from playing out indefinitely.
@@ -58,6 +90,7 @@ const initialize_sequence_with_data = () => {
 
     const seaice_seq = new Sequence((time, note) => {
       updateNote(note);
+      chart.series[0].addPoint([note.date, note.original_value]);
     }, normalized_values, '16n');
 
     seaice_seq.loop = false;
