@@ -5,8 +5,9 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
-    "start": "webpack-dev-server --open"
+    "build-dev": "webpack --env.NODE_ENV=development",
+    "build-production": "webpack --env.NODE_ENV=production",
+    "start-dev": "webpack-dev-server --env.NODE_ENV=development --open"
   },
   "keywords": [],
   "author": "NSIDC",

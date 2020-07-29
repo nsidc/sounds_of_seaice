@@ -3,16 +3,17 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = env => {
-  if (env.hasOwnProperty('production') && env.production) {
-    env.NODE_ENV = 'production';
-  } else {
-    env.NODE_ENV = 'development';
+  console.log('ENV:', typeof(env));
+  let mode = 'development';
+
+  if (env && env.hasOwnProperty('NODE_ENV') && env.NODE_ENV === 'production') {
+    mode = 'production';
   }
 
-  console.log('Using', env.NODE_ENV, 'settings.');
+  console.log('Using', mode, 'settings.');
 
   return {
-    mode: env.NODE_ENV,
+    mode: mode,
     entry: './src/index.js',
     devtool: 'inline-source-map',
     devServer: {
